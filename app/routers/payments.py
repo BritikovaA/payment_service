@@ -5,13 +5,13 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.payment import PaymentModel, PaymentStatus
 from app.models.outbox import OutboxModel, OutboxStatus
-from app.schemas.payment import PaymentCreate, PaymentResponse
+from app.schemas.payment import PaymentCreate, PaymentResponse, PaymentBaseResponse
 from app.core.deps import verify_api_key, get_idempotency_key
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 
 
-@router.post("/", response_model=PaymentResponse, status_code=status.HTTP_202_ACCEPTED)
+@router.post("/", response_model=PaymentBaseResponse, status_code=status.HTTP_202_ACCEPTED)
 async def create_payment(
         payment: PaymentCreate,
         db: AsyncSession = Depends(get_db),

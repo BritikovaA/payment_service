@@ -12,16 +12,20 @@ class PaymentCreate(BaseModel):
     webhook_url: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
 
+class PaymentBaseResponse(BaseModel):
+    payment_id: int = Field(validation_alias="id")
+    status: PaymentStatus
+    created_at: datetime
 
-class PaymentResponse(BaseModel):
-    id: int
+    class Config:
+        from_attributes = True
+
+class PaymentResponse(PaymentBaseResponse):
     amount: Decimal
     currency: CurrencyEnum
     description: Optional[str] = None
-    status: PaymentStatus
     webhook_url: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = Field(default=None, validation_alias="payment_metadata")
-    created_at: datetime
 
     class Config:
         from_attributes = True
